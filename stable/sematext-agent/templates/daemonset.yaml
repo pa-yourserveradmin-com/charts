@@ -101,6 +101,11 @@ spec:
               secretKeyRef:
                 name: {{ template "sematext-agent.fullname" . }}
                 key: logs-token
+          - name: CLUSTER_NAME
+            valueFrom:
+              secretKeyRef:
+                name: {{ template "sematext-agent.fullname" . }}
+                key: cluster-name
           envFrom:
           - configMapRef:
               name: {{ template "sematext-agent.fullname" . }}-logagent

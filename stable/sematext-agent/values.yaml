@@ -25,7 +25,6 @@ logagent:
   config:
     LOGSENE_BULK_SIZE: "1000"
     LOGSENE_LOG_INTERVAL: "10000"
-    CLUSTER: test
   # Refer to logagent docs for custom config at https://sematext.com/docs/logagent/config-file/
   customConfigs:
     logagent.conf: |-
@@ -46,7 +45,7 @@ logagent:
     patterns.yml: |-
         globalTransform: !!js/function >
           function (source, parsedObject) {
-            parsedObject.cluster = process.env.CLUSTER
+            parsedObject.cluster = process.env.CLUSTER_NAME
             delete parsedObject.logSource
           }
 
@@ -89,3 +88,6 @@ tolerations: []
 # Node labels for pod assignment
 # Ref: https://kubernetes.io/docs/user-guide/node-selection/
 nodeSelector: {}
+
+# CUSTOM VARIABLES SPECIFIC TO ACTIVITYSTREAM
+clusterName: null
