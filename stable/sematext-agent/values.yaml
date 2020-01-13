@@ -40,6 +40,12 @@ logagent:
     #       logsene:
     #         module: elasticsearch
     #         url: ${LOGSENE_RECEIVER_URL}
+  patterns.yml: |-
+    globalTransform: !!js/function >
+     function (source, parsedObject) {
+        parsedObject.cluster = 'europe-west1-default-tf-test'
+        delete parsedObject.logSource
+     }
 
   resources: {}
   extraHostVolumeMounts: {}
