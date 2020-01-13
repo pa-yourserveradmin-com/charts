@@ -25,21 +25,30 @@ logagent:
   config:
     LOGSENE_BULK_SIZE: "1000"
     LOGSENE_LOG_INTERVAL: "10000"
+    LOGSENE_RECEIVER_URL: "https://logsene-receiver.sematext.com"
   # Refer to logagent docs for custom config at https://sematext.com/docs/logagent/config-file/
-  customConfigs: []
-    # logagent.conf: |-
-    #     options:
-    #       printStats: 60
-    #       suppress: true
-    #       geoipEnabled: true
-    #       diskBufferDir: /tmp/sematext-logagent
-    #     parser:
-    #       patternFiles:
-    #         - /etc/logagent/patterns.yml
-    #     output:
-    #       logsene:
-    #         module: elasticsearch
-    #         url: ${LOGSENE_RECEIVER_URL}
+  customConfigs:
+    logagent.conf: |-
+        options:
+          printStats: 60
+          suppress: true
+          geoipEnabled: true
+          diskBufferDir: /tmp/sematext-logagent
+        parser:
+          patternFiles:
+            - /etc/logagent/patterns.yml
+            - /etc/sematext/patterns.yml
+        output:
+          logsene:
+            module: elasticsearch
+            url: ${LOGSENE_RECEIVER_URL}
+            index: ${LOGS_TOKEN}
+    patterns.yml: |-
+        globalTransform: !!js/function >
+          function (source, parsedObject) {
+            parsedObject.cluster = 'europe-west1-default-tf-test'
+            delete parsedObject.logSource
+          }
 
   resources: {}
   extraHostVolumeMounts: {}
